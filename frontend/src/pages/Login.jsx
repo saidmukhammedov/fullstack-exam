@@ -10,7 +10,9 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const res = await api.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.tokens.accessToken);
+      localStorage.setItem("refreshToken", res.data.tokens.refreshToken);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
       nav("/dashboard");
     } catch (err) {
       console.log("Login error:", err);
