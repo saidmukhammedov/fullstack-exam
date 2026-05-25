@@ -8,11 +8,8 @@ import {
   deleteTask,
   updateTaskStatus,
 } from "../controllers/task.controller.js";
-
 const router = express.Router();
-
 router.use(protect);
-
 router.get("/", getTasks);
 router.get("/:id", getTaskById);
 router.post("/", createTask);

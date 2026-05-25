@@ -13,18 +13,14 @@ export default function Dashboard() {
     dueDate: "",
   });
   const nav = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
   const fetchTasks = async () => {
     const res = await api.get("/tasks");
     setTasks(res.data.data);
   };
-
   useEffect(() => {
     fetchTasks();
   }, []);
-
   const openCreate = () => {
     setEditing(null);
     setForm({ title: "", description: "", priority: "MEDIUM", dueDate: "" });
@@ -40,7 +36,6 @@ export default function Dashboard() {
     });
     setModalOpen(true);
   };
-
   const handleSave = async () => {
     if (editing) {
       await api.put(`/tasks/${editing._id}`, form);
@@ -50,34 +45,29 @@ export default function Dashboard() {
     setModalOpen(false);
     fetchTasks();
   };
-
   const handleDelete = async (id) => {
     if (window.confirm("Delete this task?")) {
       await api.delete(`/tasks/${id}`);
       fetchTasks();
     }
   };
-
   const handleStatus = async (task) => {
     const next = { TODO: "IN_PROGRESS", IN_PROGRESS: "DONE", DONE: "TODO" };
     await api.patch(`/tasks/${task._id}/status`, { status: next[task.status] });
     fetchTasks();
   };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
     nav("/login");
   };
-
   const priorityColor = {
     HIGH: "text-red-500",
     MEDIUM: "text-yellow-500",
     LOW: "text-green-500",
   };
   const filterTasks = (status) => tasks.filter((t) => t.status === status);
-
   const TaskCard = ({ task }) => (
     <div className="bg-white rounded shadow p-3 mb-2">
       <div className="font-semibold">{task.title}</div>
@@ -111,10 +101,8 @@ export default function Dashboard() {
       </div>
     </div>
   );
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
       <div className="bg-white shadow px-6 py-3 flex justify-between items-center">
         <span className="font-bold text-lg">Task Manager</span>
         <div className="flex items-center gap-4">
@@ -127,7 +115,6 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
       <div className="p-6">
         <button
           onClick={openCreate}
@@ -135,7 +122,6 @@ export default function Dashboard() {
         >
           + New Task
         </button>
-
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-gray-200 p-4 rounded">
             <h2 className="font-bold mb-2">TODO</h2>
@@ -158,7 +144,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded w-96">

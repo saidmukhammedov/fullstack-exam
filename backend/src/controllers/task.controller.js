@@ -8,9 +8,7 @@ export const getTasks = async (req, res) => {
 export const getTaskById = async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, userId: req.user.id });
   if (!task)
-    return res
-      .status(404)
-      .json({ statusCode: 404, message: "Vazifa topilmadi" });
+    return res.status(404).json({ statusCode: 404, message: "Task not found" });
   res.json({ data: task });
 };
 
@@ -20,41 +18,33 @@ export const createTask = async (req, res) => {
     userId: req.user.id,
     status: "TODO",
   });
-  res
-    .status(201)
-    .json({ data: task, message: "Vazifa muvaffaqiyatli yaratildi" });
+  res.status(201).json({ data: task, message: "Task successfully created" });
 };
 
 export const updateTask = async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, userId: req.user.id });
   if (!task)
-    return res
-      .status(404)
-      .json({ statusCode: 404, message: "Vazifa topilmadi" });
+    return res.status(404).json({ statusCode: 404, message: "Task not found" });
 
   const updated = await Task.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
-  res.json({ data: updated, message: "Vazifa muvaffaqiyatli yangilandi" });
+  res.json({ data: updated, message: "Task successfully updated" });
 };
 
 export const deleteTask = async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, userId: req.user.id });
   if (!task)
-    return res
-      .status(404)
-      .json({ statusCode: 404, message: "Vazifa topilmadi" });
+    return res.status(404).json({ statusCode: 404, message: "Task not found" });
 
   await Task.findByIdAndDelete(req.params.id);
-  res.json({ message: "Vazifa muvaffaqiyatli o'chirildi" });
+  res.json({ message: "Task successfully deleted" });
 };
 
 export const updateTaskStatus = async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, userId: req.user.id });
   if (!task)
-    return res
-      .status(404)
-      .json({ statusCode: 404, message: "Vazifa topilmadi" });
+    return res.status(404).json({ statusCode: 404, message: "Task not found" });
 
   const updated = await Task.findByIdAndUpdate(
     req.params.id,
@@ -63,6 +53,6 @@ export const updateTaskStatus = async (req, res) => {
   );
   res.json({
     data: { _id: updated._id, status: updated.status },
-    message: "Vazifa holati yangilandi",
+    message: "Task status updated",
   });
 };
